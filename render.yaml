@@ -2,11 +2,14 @@ services:
   - type: web
     name: python-rag-chatbot
     runtime: python
+    pythonVersion: "3.11.9"
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: GROQ_API_KEY
-        sync: false   # You will set this manually in Render dashboard
+        sync: false
+      - key: PDF_PATH
+        value: data/Fluent_Python_by_Luciano_Ramalho.pdf
     disk:
       name: vector-store
       mountPath: /opt/render/project/src/vector_store
