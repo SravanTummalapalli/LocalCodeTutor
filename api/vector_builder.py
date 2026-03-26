@@ -11,7 +11,7 @@ VECTOR_STORE_DIR = "vector_store"
 # HuggingFace Inference API — free, no local model loading
 HF_API_KEY = os.getenv("HF_API_KEY", "")
 HF_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
-HF_API_URL = f"https://api-inference.huggingface.co/pipeline/feature-extraction/{HF_MODEL}"
+HF_API_URL = f"https://api-inference.huggingface.co/models/{HF_MODEL}"
 
 
 class HFEmbeddings(Embeddings):
