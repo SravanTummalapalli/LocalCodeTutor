@@ -186,7 +186,8 @@ async def chat(req: ChatRequest):
             "total_turns": len(history) // 2,
         }
     except Exception as e:
-        return {"error": str(e)}
+        import traceback
+        return {"error": str(e), "detail": traceback.format_exc()}
 
 
 # ─────────────────────────────────────────────
@@ -228,6 +229,7 @@ async def chat_stream(req: ChatRequest):
             history.append({"role": "user",      "content": req.question})
             history.append({"role": "assistant", "content": full_answer})
         except Exception as e:
-            yield f"\n\n[Error]: {str(e)}"
+            import traceback
+            yield f"\n\n[Error]: {str(e)}\n\n[Traceback]:\n{traceback.format_exc()}"
 
     return StreamingResponse(stream_generator(), media_type="text/plain")
