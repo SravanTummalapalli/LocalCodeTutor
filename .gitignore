@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+venv/
+env/
+
+# Vector store (too large for git — upload separately)
+vector_store/
+
+# Mac
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
