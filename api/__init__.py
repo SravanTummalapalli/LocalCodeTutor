@@ -1,4 +1,4 @@
-from api.vector_builder import build_vector_store, HFEmbeddings
+from api.vector_builder import build_vector_store
 from api.rag_pipeline import get_rag_pipeline
  
 rag_pipeline = None
