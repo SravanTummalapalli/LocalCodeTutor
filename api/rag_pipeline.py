@@ -3,14 +3,21 @@ from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableLambda
-
-from api.vector_builder import HFEmbeddings
+from langchain_nomic import NomicEmbeddings
 
 
 VECTOR_STORE_DIR = "vector_store"
 
-# ⚠️ Paste your Groq API key here from https://console.groq.com
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "gsk_your_actual_key_here")
+NOMIC_API_KEY = os.getenv("NOMIC_API_KEY", "")
+
+
+def get_embeddings():
+    return NomicEmbeddings(
+        model="nomic-embed-text-v1.5",
+        nomic_api_key=NOMIC_API_KEY,
+        inference_mode="remote",
+    )
 
 
 def format_documents(docs):
@@ -20,7 +27,6 @@ def format_documents(docs):
 
 
 def format_history(history: list) -> str:
-    """Convert history list to a readable string for the prompt."""
     if not history:
         return "No previous conversation."
     lines = []
@@ -60,18 +66,10 @@ First, silently decide which type the question is:
 TYPE A — THEORETICAL:
 Indicators: "What is", "Explain", "Why", "When to use", "How does X work",
             "What are the advantages", "Difference between X and Y"
-Examples:
-  - "What is inheritance in Python?"
-  - "Explain variable scope"
-  - "What are the advantages of using lists?"
 
 TYPE B — PROGRAMMING PROBLEM:
 Indicators: "Write a program", "Write code", "Implement", "Create a function",
             "How to sort", "Find the", "Print", "Calculate", "Solve"
-Examples:
-  - "Write a program to reverse a string"
-  - "Implement a stack using a list"
-  - "Find the factorial of a number"
 
 ─────────────────────────────────────────────────────
 STEP 2 — ANSWER BASED ON TYPE
@@ -109,12 +107,9 @@ Step-by-step breakdown:
 → Step 3:
 
 💻 CODE EXAMPLE
-Show a clean, well-commented example:
-
 ```python
 # code here
 ```
-
 Expected Output:
 ```
 output here
@@ -152,18 +147,16 @@ IF TYPE B — PROGRAMMING PROBLEM → USE THIS FORMAT:
 ─────────────────────────
 🥇 SOLUTION 1 — BASIC / BEGINNER APPROACH
 ─────────────────────────
-💡 Approach: [Name of approach, e.g. "Using a loop"]
-📖 Logic: Explain the idea in 1-2 lines before the code
+💡 Approach: [Name of approach]
+📖 Logic: Explain the idea in 1-2 lines
 
 ```python
 # Clean, well-commented code
 ```
-
 Output:
 ```
 expected output
 ```
-
 ⏱️ Time Complexity: O(?)
 💾 Space Complexity: O(?)
 📝 When to use this: [scenario]
@@ -171,18 +164,16 @@ expected output
 ─────────────────────────
 🥈 SOLUTION 2 — BETTER / PYTHONIC APPROACH
 ─────────────────────────
-💡 Approach: [Name of approach, e.g. "Using built-in functions"]
-📖 Logic: Explain the idea in 1-2 lines before the code
+💡 Approach: [Name of approach]
+📖 Logic: Explain the idea in 1-2 lines
 
 ```python
 # Clean, well-commented code
 ```
-
 Output:
 ```
 expected output
 ```
-
 ⏱️ Time Complexity: O(?)
 💾 Space Complexity: O(?)
 📝 When to use this: [scenario]
@@ -190,18 +181,16 @@ expected output
 ─────────────────────────
 🥉 SOLUTION 3 — OPTIMAL / ADVANCED APPROACH
 ─────────────────────────
-💡 Approach: [Name of approach, e.g. "Using recursion / list comprehension / OOP"]
-📖 Logic: Explain the idea in 1-2 lines before the code
+💡 Approach: [Name of approach]
+📖 Logic: Explain the idea in 1-2 lines
 
 ```python
 # Clean, well-commented code
 ```
-
 Output:
 ```
 expected output
 ```
-
 ⏱️ Time Complexity: O(?)
 💾 Space Complexity: O(?)
 📝 When to use this: [scenario]
@@ -209,24 +198,24 @@ expected output
 ─────────────────────────
 📊 COMPARISON TABLE
 ─────────────────────────
-| Solution   | Approach         | Time  | Space | Best For          |
-|------------|------------------|-------|-------|-------------------|
-| Solution 1 | [approach name]  | O(?)  | O(?)  | [best use case]   |
-| Solution 2 | [approach name]  | O(?)  | O(?)  | [best use case]   |
-| Solution 3 | [approach name]  | O(?)  | O(?)  | [best use case]   |
+| Solution   | Approach        | Time | Space | Best For        |
+|------------|-----------------|------|-------|-----------------|
+| Solution 1 | [approach name] | O(?) | O(?)  | [best use case] |
+| Solution 2 | [approach name] | O(?) | O(?)  | [best use case] |
+| Solution 3 | [approach name] | O(?) | O(?)  | [best use case] |
 
 ⚡ INTERVIEW TIPS
 - Which solution to present first in an interview and why
 - Common mistakes candidates make for this problem
-- Likely follow-up questions (e.g. "Can you optimize it?")
-- Edge cases to always mention: empty input, None, large numbers, etc.
+- Likely follow-up questions
+- Edge cases to always mention
 
 Keep your answer thorough, accurate, and interview-ready!
 """)
 
 
 def get_rag_pipeline():
-    embeddings = HFEmbeddings()
+    embeddings = get_embeddings()
 
     if not os.path.exists(VECTOR_STORE_DIR):
         raise FileNotFoundError(
