@@ -1,4 +1,5 @@
 import os
+import nomic
 from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
@@ -13,9 +14,10 @@ NOMIC_API_KEY = os.getenv("NOMIC_API_KEY", "")
 
 
 def get_embeddings():
+    # ✅ Explicitly authenticate before using the API
+    nomic.login(NOMIC_API_KEY)
     return NomicEmbeddings(
         model="nomic-embed-text-v1.5",
-        nomic_api_key=NOMIC_API_KEY,
         inference_mode="remote",
     )
 
