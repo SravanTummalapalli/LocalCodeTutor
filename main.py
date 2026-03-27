@@ -4,6 +4,7 @@ import os
 
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from api import load_rag_pipeline, build_vector_store
@@ -28,6 +29,16 @@ async def lifespan(app: FastAPI):
     yield
 
 
+# ── CORS — allow frontend to call backend ──────────────────────────────────
+# Add your frontend URLs here (local + deployed)
+ALLOWED_ORIGINS = [
+    "http://localhost:5173",      # Vite local dev
+    "http://localhost:3000",      # alternate local
+    "https://*.netlify.app",      # Netlify deploy
+    "https://*.vercel.app",       # Vercel deploy
+    "*",                          # Allow all (remove in production)
+]
+
 app = FastAPI(
     title="Python RAG Chatbot API",
     description="""
@@ -50,6 +61,14 @@ A RAG-powered chatbot using FAISS + Groq to answer Python interview questions.
 """,
     version="1.0.0",
     lifespan=lifespan,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],       # Allow all origins
+    allow_credentials=True,
+    allow_methods=["*"],       # Allow all methods (GET, POST, etc.)
+    allow_headers=["*"],       # Allow all headers
 )
 
 
