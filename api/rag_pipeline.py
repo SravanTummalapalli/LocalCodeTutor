@@ -147,13 +147,17 @@ IF TYPE B — PROGRAMMING PROBLEM → USE THIS FORMAT:
 - Mention any edge cases to consider
 
 ─────────────────────────
-🥇 SOLUTION 1 — BASIC / BEGINNER APPROACH
+🥇 SOLUTION 1 — BASIC / BEGINNER APPROACH (Plain code — NO functions)
 ─────────────────────────
 💡 Approach: [Name of approach]
 📖 Logic: Explain the idea in 1-2 lines
 
+IMPORTANT: Write this solution as plain, simple code WITHOUT any function or def.
+Just straight line-by-line code a beginner can read top to bottom.
+
 ```python
-# Clean, well-commented code
+# Plain code — no def, no function
+# Just direct statements and logic
 ```
 Output:
 ```
@@ -161,16 +165,24 @@ expected output
 ```
 ⏱️ Time Complexity: O(?)
 💾 Space Complexity: O(?)
-📝 When to use this: [scenario]
+📝 When to use this: Simple scripts, quick tasks, learning Python basics
 
 ─────────────────────────
-🥈 SOLUTION 2 — BETTER / PYTHONIC APPROACH
+🥈 SOLUTION 2 — FUNCTION APPROACH
 ─────────────────────────
-💡 Approach: [Name of approach]
+💡 Approach: [Name of approach — using a function]
 📖 Logic: Explain the idea in 1-2 lines
 
+IMPORTANT: Write this solution using a proper function with def, parameters and return value.
+
 ```python
-# Clean, well-commented code
+# Using a function
+def solution(...):
+    # logic here
+    return result
+
+# Call the function
+print(solution(...))
 ```
 Output:
 ```
@@ -178,16 +190,19 @@ expected output
 ```
 ⏱️ Time Complexity: O(?)
 💾 Space Complexity: O(?)
-📝 When to use this: [scenario]
+📝 When to use this: Reusable code, production code, when called multiple times
 
 ─────────────────────────
-🥉 SOLUTION 3 — OPTIMAL / ADVANCED APPROACH
+🥉 SOLUTION 3 — OPTIMAL / PYTHONIC APPROACH
 ─────────────────────────
-💡 Approach: [Name of approach]
+💡 Approach: [Name of approach — e.g. one-liner, built-in, list comprehension]
 📖 Logic: Explain the idea in 1-2 lines
 
+IMPORTANT: Write the most Pythonic, concise version — use built-ins, comprehensions,
+lambda, or any Python-specific feature that makes it elegant.
+
 ```python
-# Clean, well-commented code
+# Pythonic one-liner or advanced approach
 ```
 Output:
 ```
@@ -195,7 +210,7 @@ expected output
 ```
 ⏱️ Time Complexity: O(?)
 💾 Space Complexity: O(?)
-📝 When to use this: [scenario]
+📝 When to use this: When code brevity and Python expertise matters
 
 ─────────────────────────
 📊 COMPARISON TABLE
@@ -217,6 +232,8 @@ Keep your answer thorough, accurate, and interview-ready!
 
 
 def get_rag_pipeline():
+    print(f"🔑 NOMIC_API_KEY set: {bool(NOMIC_API_KEY)}")
+    print(f"🔑 GROQ_API_KEY set: {bool(GROQ_API_KEY)}")
     embeddings = get_embeddings()
 
     if not os.path.exists(VECTOR_STORE_DIR):
