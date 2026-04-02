@@ -9,7 +9,7 @@ services:
         value: "3.11.9"
       - key: GROQ_API_KEY
         sync: false
-      - key: NOMIC_API_KEY
+      - key: GOOGLE_API_KEY
         sync: false
       - key: PDF_PATH
         value: data/Fluent_Python_by_Luciano_Ramalho.pdf
