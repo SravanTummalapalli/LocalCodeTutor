@@ -1,6 +1,3 @@
-
-Copy
-
 import os
 from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq
