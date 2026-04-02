@@ -1,33 +1,29 @@
+
+Copy
+
 import os
-import nomic
 from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableLambda
-from langchain_nomic import NomicEmbeddings
-
-
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
+ 
 VECTOR_STORE_DIR = "vector_store"
-
+ 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "gsk_your_actual_key_here")
-NOMIC_API_KEY = os.getenv("NOMIC_API_KEY", "")
-
-
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
+ 
 def get_embeddings():
-    # ✅ Explicitly authenticate before using the API
-    nomic.login(NOMIC_API_KEY)
-    return NomicEmbeddings(
-        model="nomic-embed-text-v1.5",
-        inference_mode="remote",
+    return GoogleGenerativeAIEmbeddings(
+        model="models/gemini-embedding-001",
+        google_api_key=GOOGLE_API_KEY,
     )
-
-
+ 
 def format_documents(docs):
     if not docs:
         return "This topic isn't covered in the materials I have."
     return "\n\n".join(doc.page_content for doc in docs)
-
-
+ 
 def format_history(history: list) -> str:
     if not history:
         return "No previous conversation."
