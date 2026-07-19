@@ -225,7 +225,7 @@ Keep your answer thorough, accurate, and interview-ready!
 
 
 def get_rag_pipeline():
-    print(f"🔑 NOMIC_API_KEY set: {bool(NOMIC_API_KEY)}")
+    #print(f"🔑 NOMIC_API_KEY set: {bool(NOMIC_API_KEY)}")
     print(f"🔑 GROQ_API_KEY set: {bool(GROQ_API_KEY)}")
     embeddings = get_embeddings()
 
