@@ -1,20 +1,22 @@
 import os
 from langchain_community.vectorstores import FAISS
+from langchain_community.embeddings import FastEmbedEmbeddings
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableLambda
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
  
 VECTOR_STORE_DIR = "vector_store"
+
+# Must match vector_builder.py's EMBEDDING_MODEL exactly — same model at
+# build time and query time, or the FAISS similarity search is meaningless.
+EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
  
-GROQ_API_KEY = os.getenv("GROQ_API_KEY", "gsk_your_actual_key_here")
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
- 
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+if not GROQ_API_KEY:
+    raise ValueError("GROQ_API_KEY environment variable is not set")
+
 def get_embeddings():
-    return GoogleGenerativeAIEmbeddings(
-        model="models/gemini-embedding-001",
-        google_api_key=GOOGLE_API_KEY,
-    )
+    return FastEmbedEmbeddings(model_name=EMBEDDING_MODEL)
  
 def format_documents(docs):
     if not docs:
@@ -225,7 +227,7 @@ Keep your answer thorough, accurate, and interview-ready!
 
 
 def get_rag_pipeline():
-    print(f"🔑 NOMIC_API_KEY set: {bool(NOMIC_API_KEY)}")
+    #print(f"🔑 NOMIC_API_KEY set: {bool(NOMIC_API_KEY)}")
     print(f"🔑 GROQ_API_KEY set: {bool(GROQ_API_KEY)}")
     embeddings = get_embeddings()
 
@@ -244,7 +246,7 @@ def get_rag_pipeline():
     retriever = vector_store.as_retriever(search_kwargs={"k": 6})
 
     llm = ChatGroq(
-        model="llama-3.3-70b-versatile",
+        model="openai/gpt-oss-120b",
         temperature=0.2,
         api_key=GROQ_API_KEY,
         timeout=30,

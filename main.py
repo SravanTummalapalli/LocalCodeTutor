@@ -160,12 +160,12 @@ async def clear_history(session_id: str):
 class ChatRequest(BaseModel):
     question: str = Field(
         ...,
-        example="What is Python inheritance?",
+        json_schema_extra={"example": "What is Python inheritance?"},
         description="The Python topic or question you want to ask",
     )
     session_id: str = Field(
         ...,
-        example="paste-your-session-id-here",
+        json_schema_extra={"example": "paste-your-session-id-here"},
         description="Session ID from /session/new — required to maintain chat history",
     )
 
