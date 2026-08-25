@@ -5,9 +5,7 @@ __pycache__/
 .env
 venv/
 env/
-
-# Vector store (too large for git — upload separately)
-vector_store/
+test_env/
 
 # Mac
 .DS_Store
